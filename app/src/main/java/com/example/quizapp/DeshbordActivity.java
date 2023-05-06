@@ -2,24 +2,71 @@ package com.example.quizapp;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import static com.example.quizapp.MainActivity.listOfQuestion;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.example.quizapp.model.QuestionModel;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class DeshbordActivity extends AppCompatActivity {
 
 
     CountDownTimer countDownTimer;
     ProgressBar progressBar;
+    ArrayList<QuestionModel> allQuestionList;
+    QuestionModel questionModel;
+
+    CardView cardView,cardView2,cardView3,cardView4,cardView5;
+    TextView questionTV, ansOneTV,ansTwoTV,ansThreeTV,ansFourTV;
+    Button nextBtn;
     int timer=20;
+    int index=0;
+
+    int correctCount=0;
+    int wrongCount=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deshbord);
+
+
+
+       viewBinding();
+
+       allQuestionList=listOfQuestion;
+
+
+        Log.d(TAG, "onCreate: "+allQuestionList.size());
+
+        if (!allQuestionList.isEmpty()) {
+            // shuffle allQuestionList
+            Collections.shuffle(allQuestionList);
+            // assign the first element to questionModel
+            questionModel = allQuestionList.get(index);
+            // set the question and answer options
+            setAllQuestion();
+        } else {
+            // handle the case where allQuestionList is empty
+            Log.d(TAG, "All questions have been answered.");
+        }
+
 
         progressBar=findViewById(R.id.progressBar);
         countDownTimer=new CountDownTimer(20000,1000) {
@@ -38,5 +85,150 @@ public class DeshbordActivity extends AppCompatActivity {
 
             }
         }.start();
+    }
+
+    private void setAllQuestion() {
+
+
+
+        questionTV.setText(questionModel.getQuestion());
+        ansOneTV.setText(questionModel.getAnsOne());
+        ansTwoTV.setText(questionModel.getAnsTwo());
+        ansThreeTV.setText(questionModel.getAnsThree());
+        ansFourTV.setText(questionModel.getAnsFour());
+
+    }
+
+    private void viewBinding() {
+        cardView=findViewById(R.id.cardView);
+        cardView2=findViewById(R.id.cardView2);
+        cardView3=findViewById(R.id.cardView3);
+        cardView4=findViewById(R.id.cardView4);
+        cardView5=findViewById(R.id.cardView5);
+
+        questionTV=findViewById(R.id.question_Tv);
+        ansOneTV=findViewById(R.id.ans_one_Tv);
+        ansTwoTV=findViewById(R.id.ans_two_Tv);
+        ansThreeTV=findViewById(R.id.ans_three_Tv);
+        ansFourTV=findViewById(R.id.ans_four_Tv);
+
+        nextBtn=findViewById(R.id.next_btn);
+    }
+    public  void correct(){
+        nextBtn.setOnClickListener(view -> {
+            correctCount++;
+            index++;
+            questionModel = allQuestionList.get(index);
+        });
+
+    }
+
+    public  void  wrong(){
+
+
+  nextBtn.setOnClickListener(view -> {
+      wrongCount++;
+      if(index<allQuestionList.size()-1){
+          index++;
+          questionModel = allQuestionList.get(index);
+          setAllQuestion();
+      }else {
+          GameWon();
+      }
+  });
+
+    }
+
+    private void GameWon() {
+        startActivity(new Intent(DeshbordActivity.this,GameWonActivity.class));
+
+    }
+    public void clickEnable(){
+        cardView2.setClickable(true);
+        cardView3.setClickable(true);
+        cardView4.setClickable(true);
+        cardView5.setClickable(true);
+    }
+
+    public void clickDisable(){
+        cardView2.setClickable(false);
+        cardView3.setClickable(false);
+        cardView4.setClickable(false);
+        ansFourTV.setClickable(false);
+    }
+    public  void resetBackColor(){
+        cardView2.setBackgroundColor(getResources().getColor(R.color.white));
+        cardView3.setBackgroundColor(getResources().getColor(R.color.white));
+        cardView4.setBackgroundColor(getResources().getColor(R.color.white));
+        cardView5.setBackgroundColor(getResources().getColor(R.color.white));
+    }
+
+    public void ansOneClick(View view) {
+
+        if (questionModel.getAnsOne().equals(questionModel.getFinalAns())){
+            cardView2.setCardBackgroundColor(getResources().getColor(R.color.black));
+            if(index<allQuestionList.size()-1){
+                index++;
+                questionModel = allQuestionList.get(index);
+                setAllQuestion();
+            }else {
+                GameWon();
+            }
+        }else {
+            cardView2.setCardBackgroundColor(getResources().getColor(R.color.red));
+            GameWon();
+        }
+    }
+
+    public void ansTwoClick(View view) {
+        if (questionModel.getAnsTwo().equals(questionModel.getFinalAns())){
+            cardView3.setCardBackgroundColor(getResources().getColor(R.color.black));
+            if(index<allQuestionList.size()-1){
+                index++;
+                questionModel = allQuestionList.get(index);
+                setAllQuestion();
+            }else {
+                GameWon();
+                GameWon();
+            }
+
+        }else {
+            cardView3.setCardBackgroundColor(getResources().getColor(R.color.red));
+            GameWon();
+        }
+    }
+
+    public void ansThreeClick(View view) {
+        if (questionModel.getAnsThree().equals(questionModel.getFinalAns())){
+            cardView4.setCardBackgroundColor(getResources().getColor(R.color.black));
+            if(index<allQuestionList.size()-1){
+                index++;
+                questionModel = allQuestionList.get(index);
+                setAllQuestion();
+            }else {
+                GameWon();
+            }
+
+        }else {
+            cardView4.setCardBackgroundColor(getResources().getColor(R.color.red));
+            GameWon();
+        }
+    }
+
+    public void ansFourClick(View view) {
+        if (questionModel.getAnsFour().equals(questionModel.getFinalAns())){
+            cardView5.setCardBackgroundColor(getResources().getColor(R.color.black));
+            if(index<allQuestionList.size()-1){
+                index++;
+                questionModel = allQuestionList.get(index);
+                setAllQuestion();
+            }else {
+                GameWon();
+            }
+
+        }else {
+            cardView5.setCardBackgroundColor(getResources().getColor(R.color.red));
+            GameWon();
+        }
     }
 }
