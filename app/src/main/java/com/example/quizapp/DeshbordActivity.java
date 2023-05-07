@@ -69,22 +69,26 @@ public class DeshbordActivity extends AppCompatActivity {
 
 
         progressBar=findViewById(R.id.progressBar);
-        countDownTimer=new CountDownTimer(20000,1000) {
-            @Override
-            public void onTick(long l) {
-                timer=timer-1;
-                progressBar.setProgress(timer);
-            }
+        startCounterTimer(20000);
+    }
 
-            @Override
-            public void onFinish() {
-                Log.d(TAG, "onFinish: done");
-                Dialog dialog=new Dialog(DeshbordActivity.this,R.style.dialog);
-                dialog.setContentView(R.layout.timer_dialog);
-                dialog.show();
+   public void startCounterTimer(long timere){
+       countDownTimer=new CountDownTimer(timere,1000) {
+           @Override
+           public void onTick(long l) {
+               timer=timer-1;
+               progressBar.setProgress(timer);
+           }
 
-            }
-        }.start();
+           @Override
+           public void onFinish() {
+               Log.d(TAG, "onFinish: done");
+               Dialog dialog=new Dialog(DeshbordActivity.this,R.style.dialog);
+               dialog.setContentView(R.layout.timer_dialog);
+               dialog.show();
+
+           }
+       }.start();
     }
 
     private void setAllQuestion() {
@@ -114,24 +118,40 @@ public class DeshbordActivity extends AppCompatActivity {
 
         nextBtn=findViewById(R.id.next_btn);
     }
-    public  void correct(){
+    public  void correct(CardView cardAnsView){
+        Log.d(TAG, "correct: ");
+        cardAnsView.setCardBackgroundColor(getResources().getColor(R.color.black));
+
         nextBtn.setOnClickListener(view -> {
+            Log.d(TAG, "correct: 2");
             correctCount++;
             index++;
             questionModel = allQuestionList.get(index);
+            setAllQuestion();
+            resetBackColor();
+            startCounterTimer(20000);
+            timer=20;
+            clickEnable();
         });
 
     }
 
-    public  void  wrong(){
-
+    public  void  wrong(CardView wongAnsView){
+        Log.d(TAG, "wrong: ");
+        wongAnsView.setCardBackgroundColor(getResources().getColor(R.color.red));
 
   nextBtn.setOnClickListener(view -> {
+      Log.d(TAG, "wrong:2 ");
       wrongCount++;
       if(index<allQuestionList.size()-1){
+          Log.d(TAG, "wrong:3");
           index++;
           questionModel = allQuestionList.get(index);
           setAllQuestion();
+          resetBackColor();
+          startCounterTimer(20000);
+          timer=20;
+          clickEnable();
       }else {
           GameWon();
       }
@@ -168,15 +188,14 @@ public class DeshbordActivity extends AppCompatActivity {
         if (questionModel.getAnsOne().equals(questionModel.getFinalAns())){
             cardView2.setCardBackgroundColor(getResources().getColor(R.color.black));
             if(index<allQuestionList.size()-1){
-                index++;
-                questionModel = allQuestionList.get(index);
-                setAllQuestion();
+                correct(cardView2);
+
             }else {
                 GameWon();
             }
         }else {
-            cardView2.setCardBackgroundColor(getResources().getColor(R.color.red));
-            GameWon();
+            wrong(cardView2);
+
         }
     }
 
@@ -184,17 +203,14 @@ public class DeshbordActivity extends AppCompatActivity {
         if (questionModel.getAnsTwo().equals(questionModel.getFinalAns())){
             cardView3.setCardBackgroundColor(getResources().getColor(R.color.black));
             if(index<allQuestionList.size()-1){
-                index++;
-                questionModel = allQuestionList.get(index);
-                setAllQuestion();
+                correct(cardView3);
             }else {
-                GameWon();
                 GameWon();
             }
 
         }else {
-            cardView3.setCardBackgroundColor(getResources().getColor(R.color.red));
-            GameWon();
+            wrong(cardView3);
+
         }
     }
 
@@ -202,16 +218,14 @@ public class DeshbordActivity extends AppCompatActivity {
         if (questionModel.getAnsThree().equals(questionModel.getFinalAns())){
             cardView4.setCardBackgroundColor(getResources().getColor(R.color.black));
             if(index<allQuestionList.size()-1){
-                index++;
-                questionModel = allQuestionList.get(index);
-                setAllQuestion();
+                correct(cardView4);
             }else {
                 GameWon();
             }
 
         }else {
-            cardView4.setCardBackgroundColor(getResources().getColor(R.color.red));
-            GameWon();
+            wrong(cardView4);
+
         }
     }
 
@@ -219,16 +233,14 @@ public class DeshbordActivity extends AppCompatActivity {
         if (questionModel.getAnsFour().equals(questionModel.getFinalAns())){
             cardView5.setCardBackgroundColor(getResources().getColor(R.color.black));
             if(index<allQuestionList.size()-1){
-                index++;
-                questionModel = allQuestionList.get(index);
-                setAllQuestion();
+               correct(cardView5);
             }else {
                 GameWon();
             }
 
         }else {
-            cardView5.setCardBackgroundColor(getResources().getColor(R.color.red));
-            GameWon();
+            wrong(cardView5);
+
         }
     }
 }
