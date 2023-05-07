@@ -86,6 +86,7 @@ public class DeshbordActivity extends AppCompatActivity {
                Dialog dialog=new Dialog(DeshbordActivity.this,R.style.dialog);
                dialog.setContentView(R.layout.timer_dialog);
                dialog.show();
+               GameWon();
 
            }
        }.start();
@@ -184,7 +185,8 @@ public class DeshbordActivity extends AppCompatActivity {
     }
 
     public void ansOneClick(View view) {
-
+        clickDisable();
+        nextBtn.setClickable(true);
         if (questionModel.getAnsOne().equals(questionModel.getFinalAns())){
             cardView2.setCardBackgroundColor(getResources().getColor(R.color.black));
             if(index<allQuestionList.size()-1){
@@ -194,12 +196,15 @@ public class DeshbordActivity extends AppCompatActivity {
                 GameWon();
             }
         }else {
+            cardView2.setCardBackgroundColor(getResources().getColor(R.color.red));
             wrong(cardView2);
 
         }
     }
 
     public void ansTwoClick(View view) {
+        clickDisable();
+        nextBtn.setClickable(true);
         if (questionModel.getAnsTwo().equals(questionModel.getFinalAns())){
             cardView3.setCardBackgroundColor(getResources().getColor(R.color.black));
             if(index<allQuestionList.size()-1){
@@ -209,12 +214,15 @@ public class DeshbordActivity extends AppCompatActivity {
             }
 
         }else {
+            cardView3.setCardBackgroundColor(getResources().getColor(R.color.red));
             wrong(cardView3);
 
         }
     }
 
     public void ansThreeClick(View view) {
+        clickDisable();
+        nextBtn.setClickable(true);
         if (questionModel.getAnsThree().equals(questionModel.getFinalAns())){
             cardView4.setCardBackgroundColor(getResources().getColor(R.color.black));
             if(index<allQuestionList.size()-1){
@@ -224,12 +232,15 @@ public class DeshbordActivity extends AppCompatActivity {
             }
 
         }else {
+            cardView4.setCardBackgroundColor(getResources().getColor(R.color.red));
             wrong(cardView4);
 
         }
     }
 
     public void ansFourClick(View view) {
+        clickDisable();
+        nextBtn.setClickable(true);
         if (questionModel.getAnsFour().equals(questionModel.getFinalAns())){
             cardView5.setCardBackgroundColor(getResources().getColor(R.color.black));
             if(index<allQuestionList.size()-1){
@@ -239,6 +250,7 @@ public class DeshbordActivity extends AppCompatActivity {
             }
 
         }else {
+            cardView5.setCardBackgroundColor(getResources().getColor(R.color.red));
             wrong(cardView5);
 
         }

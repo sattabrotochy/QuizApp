@@ -39,5 +39,5 @@ dependencies {
 
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
     //compile 'com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1'
-
+    implementation 'com.mikhaellopez:circularprogressbar:3.1.0'
 }
